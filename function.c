@@ -1,114 +1,126 @@
 #include "main.h"
 
 /**
- * strings_compare - Compares 2 strings
- * @string1: comparison 1st string
- * @string2: string 2nd for comparison
- * Return: if same, 0 if not the same
+ * are_strings_equal - Checks if two strings are equal.
+ *
+ * @string1: Pointer to the first string.
+ * @string2: Pointer to the second string.
+ *
+ * Return: 1 if equal, 0 otherwise.
  */
-
-int strings_compare(char *string1, char *string2)
+int are_strings_equal(const char *string1, const char *string2)
 {
-	unsigned int i = 0;
+    while (*string1 && *string2)
+    {
+        if (*string1 != *string2)
+            return 0;
 
-	while (string1[i])
-	{
-		if (string1[i] != string2[i])
-			return (0);
-		i++;
-	}
+        string1++;
+        string2++;
+    }
 
-	return (1);
+    return (*string1 == *string2);
 }
 
-
 /**
- * strings_length - Finds the length of a strings
- * @string: string pointer
- * Return: length of the string
+ * string_length - Calculates the length of a string.
+ *
+ * @string: Pointer to the input string.
+ *
+ * Return: Length of the string.
  */
-unsigned int strings_length(char *string)
+unsigned int string_length(const char *string)
 {
-	int len = 0;
+    unsigned int length = 0;
 
-	if (!string)
-		return (0);
+    while (*string)
+    {
+        length++;
+        string++;
+    }
 
-	while (*string++)
-		len++;
-	return (len);
+    return length;
 }
 
-
 /**
- * strings_copy - copies a string to another destination
- * @desti: pointer to copied string destination
- * @sources: pointer to string copied from
- * Return: Pointer to copied string
+ * string_copy - Copies a string to a destination buffer.
+ *
+ * @destination: Pointer to the destination buffer.
+ * @source: Pointer to the source string.
+ *
+ * Return: Pointer to the destination buffer.
  */
-
-char *strings_copy(char *desti, char *sources)
+char *string_copy(char *destination, const char *source)
 {
-	char *temp = desti;
+    char *temp = destination;
 
-	while (*sources)
-		*desti++ = *sources++;
-	*desti = '\0';
-	return (temp);
+    while (*source)
+    {
+        *destination = *source;
+        destination++;
+        source++;
+    }
+
+    *destination = '\0';
+    return temp;
 }
 
-
 /**
- * string_conc - Function that concatenates 2 strings.
- * @desti: destination for the concatenation
- * @sources: an input string
- * Return: pointer to the resulting strings
+ * string_concatenate - Concatenates two strings with a '/' in between.
+ *
+ * @destination: Pointer to the destination buffer.
+ * @source: Pointer to the source string.
+ *
+ * Return: Pointer to the destination buffer.
  */
-
-char *string_conc(char *desti, char *sources)
+char *string_concatenate(char *destination, const char *source)
 {
-	char *temp = desti;
+    char *temp = destination;
 
-	while (*desti)
-		desti++;
+    while (*destination)
+        destination++;
 
-	*desti++ = '/';
-	while (*sources)
-		*desti++ = *sources++;
-	return (temp);
+    *destination = '/';
+    destination++;
+
+    while (*source)
+    {
+        *destination = *source;
+        destination++;
+        source++;
+    }
+
+    *destination = '\0';
+    return temp;
 }
 
-
 /**
- * string_int - that converts string to integer.
- * @string: Input string.
- * Return: integer equivalent.
+ * string_to_int - Converts a string to an integer.
+ *
+ * @string: Pointer to the input string.
+ *
+ * Return: The integer equivalent of the string.
  */
-int string_int(char *string)
+int string_to_int(const char *string)
 {
-	int iz;
-	int sign = 1, str_z = 0, output;
-	unsigned int result = 0;
+    int sign = 1, state = 0, output = 0;
 
-	for (iz = 0;  string[iz] != '\0' && str_z != 2; iz++)
-	{
-		if (string[iz] == '-')
-			sign *= -1;
+    while (*string)
+    {
+        if (*string == '-')
+            sign *= -1;
 
-		if (string[iz] >= '0' && string[iz] <= '9')
-		{
-			str_z = 1;
-			result *= 10;
-			result += (string[iz] - '0');
-		}
-		else if (str_z == 1)
-			str_z = 2;
-	}
+        if (*string >= '0' && *string <= '9')
+        {
+            state = 1;
+            output *= 10;
+            output += (*string - '0');
+        }
+        else if (state == 1)
+            break;
 
-	if (sign == -1)
-		output = -result;
-	else
-		output = result;
+        string++;
+    }
 
-	return (output);
+    return (sign * output);
 }
