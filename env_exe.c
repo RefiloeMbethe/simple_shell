@@ -1,120 +1,115 @@
 #include "main.h"
 
 /**
- * path_direc - gets the value from env PATH direction
+ * get_env_value - Get the value of a specific environment variable.
  *
- * @env: environmental variables pointer
+ * @env: Pointer to the environmental variables array.
+ * @var_name: Name of the environment variable to find.
  *
- * Return: pathway for commands in directories
+ * Return: Pointer to the value of the environment variable, or NULL if not found.
  */
-char **path_direc(char **env)
+char *get_env_value(char **env, const char *var_name)
 {
-	char **way_path = NULL, *values_path = NULL;
-	unsigned int inte = 0;
-
-	values_path = strtok(env[inte], "=");
-	while (env[inte])
+	while (*env)
 	{
-		if (strings_compare(values_path, "PATH"))
+		if (strings_compare(*env, var_name) == 0)
 		{
-			values_path = strtok(NULL, "\n");
-			way_path = tokenizing(values_path, ":");
-			return (way_path);
+			char *value = *env + strings_length(var_name) + 1;
+			return value;
 		}
-		inte++;
-		values_path = strtok(env[inte], "=");
+		env++;
 	}
-	return (NULL);
+	return NULL;
 }
 
-
 /**
- * exe_command - function that executes a command
+ * execute_command - Function that executes a command.
  *
- * @commands: command pointer of strings
+ * @commands: Pointer to the command strings array.
+ * @shell_name: Name of the shell.
+ * @env: Pointer to the environmental variables array.
+ * @cycle: Number of executed cycles.
  *
- * @names: name of the shell
- *
- * @env: environmental variables pointer
- * @cycle: number of executed cycles
- * Return: nothing
+ * Return: Nothing.
  */
-void exe_command(char **commands, char *names, char **env, int cycle)
+void execute_command(char **commands, char *shell_name, char **env, int cycle)
 {
-	char **way_path = NULL, *fullpaths = NULL;
-	struct stat iz;
+	char **path_dirs = NULL, *full_path = NULL;
+	struct stat st;
 	unsigned int i = 0;
 
-	if (strings_compare(commands[0], "env") != 0)
-		print_environ(env);
-	if (stat(commands[0], &iz) == 0)
+	if (strings_compare(commands[0], "env") == 0)
+	{
+		print_environment(env);
+		return;
+	}
+
+	if (stat(commands[0], &st) == 0)
 	{
 		if (execve(commands[0], commands, env) < 0)
 		{
-			perror(names);
-			free_memry_exit(commands);
+			perror(shell_name);
+			free_and_exit(commands);
 		}
 	}
 	else
 	{
-		path_ways = path_direc(env);
-		while (path_ways[i])
+		path_dirs = split_string(get_env_value(env, "PATH"), ":");
+		while (path_dirs[i])
 		{
-			fullpaths = string_conc(way_path[i], commands[0]);
+			full_path = string_concat(path_dirs[i], "/");
+			full_path = string_concat(full_path, commands[0]);
 			i++;
-			if (stat(fullpaths, &iz) == 0)
+			if (stat(full_path, &st) == 0)
 			{
-				if (execve(fullpaths, commands, env) < 0)
+				if (execve(full_path, commands, env) < 0)
 				{
-					perror(names);
-					memry_freed(way_path);
-					free_memry_exit(commands);
+					perror(shell_name);
+					free_and_exit(commands);
 				}
 				return;
 			}
+			free(full_path);
 		}
-		error_messages(names, cycle, commands);
-		memry_freed(way_path);
 	}
+
+	error_message(shell_name, cycle, commands[0]);
+	free_and_exit(commands);
 }
 
-
 /**
- * error_messages - Prints messages not found
+ * error_message - Print the command not found error message.
  *
- * @names: shell name
- * @cycle: number of cycles
- * @commands: tokenized cmnd
- * Return: nothing
+ * @shell_name: Name of the shell.
+ * @cycle: Number of cycles.
+ * @command: Name of the command.
+ *
+ * Return: Nothing.
  */
-void error_messages(char *names, int cycle, char **commands)
+void error_message(char *shell_name, int cycle, char *command)
 {
-	char cycle_cee;
-
-	cycle_cee = cycle + '0';
-	write(STDOUT_FILENO, names, string_len(names));
+	char cycle_char = cycle + '0';
+	write(STDOUT_FILENO, shell_name, strings_length(shell_name));
 	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, &cycle_cee, 1);
+	write(STDOUT_FILENO, &cycle_char, 1);
 	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, commands[0], string_len(commands[0]));
+	write(STDOUT_FILENO, command, strings_length(command));
 	write(STDOUT_FILENO, ": not found\n", 12);
 }
 
-
 /**
- * prints_environ - print all enviromental variable.
- * @env: enviromental variables pointer
- * return: nothing
+ * print_environment - Print all environmental variables.
+ *
+ * @env: Pointer to the environmental variables array.
+ *
+ * Return: Nothing.
  */
-void prints_environ(char **env)
+void print_environment(char **env)
 {
-	size_t i = 0, length = 0;
-
-	while (env[i])
+	while (*env)
 	{
-		length = string_len(env[i]);
-		write(STDOUT_FILENO, env[i], length);
+		write(STDOUT_FILENO, *env, strings_length(*env));
 		write(STDOUT_FILENO, "\n", 1);
-		i++;
+		env++;
 	}
 }
