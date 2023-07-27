@@ -10,16 +10,16 @@
  */
 int are_strings_equal(const char *string1, const char *string2)
 {
-    while (*string1 && *string2)
-    {
-        if (*string1 != *string2)
-            return 0;
+	while (*string1 && *string2)
+	{
+		if (*string1 != *string2)
+			return (0);
 
-        string1++;
-        string2++;
-    }
+		string1++;
+		string2++;
+	}
 
-    return (*string1 == *string2);
+	return (*string1 == *string2);
 }
 
 /**
@@ -31,15 +31,15 @@ int are_strings_equal(const char *string1, const char *string2)
  */
 unsigned int string_length(const char *string)
 {
-    unsigned int length = 0;
+	unsigned int length = 0;
 
-    while (*string)
-    {
-        length++;
-        string++;
-    }
+	while (*string)
+	{
+		length++;
+		string++;
+	}
 
-    return length;
+	return (length);
 }
 
 /**
@@ -52,17 +52,17 @@ unsigned int string_length(const char *string)
  */
 char *string_copy(char *destination, const char *source)
 {
-    char *temp = destination;
+	char *temp = destination;
 
-    while (*source)
-    {
-        *destination = *source;
-        destination++;
-        source++;
-    }
+	while (*source)
+	{
+		*destination = *source;
+		destination++;
+		source++;
+	}
 
-    *destination = '\0';
-    return temp;
+	*destination = '\0';
+	return (temp);
 }
 
 /**
@@ -75,23 +75,23 @@ char *string_copy(char *destination, const char *source)
  */
 char *string_concatenate(char *destination, const char *source)
 {
-    char *temp = destination;
+	char *temp = destination;
 
-    while (*destination)
-        destination++;
+	while (*destination)
+		destination++;
 
-    *destination = '/';
-    destination++;
+	*destination = '/';
+	destination++;
 
-    while (*source)
-    {
-        *destination = *source;
-        destination++;
-        source++;
-    }
+	while (*source)
+	{
+		*destination = *source;
+		destination++;
+		source++;
+	}
 
-    *destination = '\0';
-    return temp;
+	*destination = '\0';
+	return (temp);
 }
 
 /**
@@ -103,24 +103,24 @@ char *string_concatenate(char *destination, const char *source)
  */
 int string_to_int(const char *string)
 {
-    int sign = 1, state = 0, output = 0;
+	int sign = 1, state = 0, output = 0;
 
-    while (*string)
-    {
-        if (*string == '-')
-            sign *= -1;
+	while (*string)
+	{
+		if (*string == '-')
+			sign *= -1;
 
-        if (*string >= '0' && *string <= '9')
-        {
-            state = 1;
-            output *= 10;
-            output += (*string - '0');
-        }
-        else if (state == 1)
-            break;
+		if (*string >= '0' && *string <= '9')
+		{
+			state = 1;
+			output *= 10;
+			output += (*string - '0');
+		}
+		else if (state == 1)
+			break;
 
-        string++;
-    }
+		string++;
+	}
 
-    return (sign * output);
+	return (sign * output);
 }
