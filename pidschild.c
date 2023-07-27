@@ -10,24 +10,24 @@
  */
 int changes_directories(const char *paths)
 {
-    if (paths == NULL)
-    {
-        char buffer[1024];
-        paths = getcwd(buffer, sizeof(buffer));
-        if (paths == NULL)
-        {
-            perror("getcwd");
-            return -1;
-        }
-    }
+	if (paths == NULL)
+	{
+		char buffer[1024];
+		paths = getcwd(buffer, sizeof(buffer));
+		if (paths == NULL)
+		{
+			perror("getcwd");
+			return (-1);
+		}
+	}
 
-    if (chdir(paths) == -1)
-    {
-        perror("chdir");
-        return -1;
-    }
+	if (chdir(paths) == -1)
+	{
+		perror("chdir");
+		return (-1);
+	}
 
-    return 0;
+	return (0);
 }
 
 /**
@@ -42,26 +42,26 @@ int changes_directories(const char *paths)
  */
 void child_process(char **cmds, char *names, char **env, int cycle)
 {
-    int pid = fork();
-    if (pid < 0)
-    {
-        perror("fork");
-        free_memry_exit(cmds);
-    }
-    else if (pid == 0)
-    {
-        execute_cmd(cmds, names, env, cycle);
-        memry_freed(cmds);
-    }
-    else
-    {
-        int status;
-        int waitingResults = waitpid(pid, &status, 0);
-        if (waitingResults < 0)
-        {
-            perror("waitpid");
-            free_memry_exit(cmds);
-        }
-        memry_freed(cmds);
-    }
+	int pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		free_memry_exit(cmds);
+	}
+	else if (pid == 0)
+	{
+		execute_cmd(cmds, names, env, cycle);
+		memry_freed(cmds);
+	}
+	else
+	{
+		int status;
+		int waitingResults = waitpid(pid, &status, 0);
+		if (waitingResults < 0)
+		{
+			perror("waitpid");
+			free_memry_exit(cmds);
+		}
+		memry_freed(cmds);
+	}
 }
