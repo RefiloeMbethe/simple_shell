@@ -12,7 +12,7 @@
 char **split_string(char *buffers, const char *delimiter)
 {
     if (buffers == NULL)
-        return NULL;
+        return (NULL);
 
     size_t bufferSizes = strlen(buffers);
     char **tokens_array = malloc((bufferSizes + 1) * sizeof(char *));
@@ -34,12 +34,12 @@ char **split_string(char *buffers, const char *delimiter)
         {
             perror("Memory allocation error");
             memry_freed(tokens_array);
-            return NULL;
+            return (NULL);
         }
         token = strtok(NULL, delimiter);
         token_count++;
     }
 
     tokens_array[token_count] = NULL;
-    return tokens_array;
+    return (tokens_array);
 }
