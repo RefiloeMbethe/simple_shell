@@ -113,3 +113,30 @@ void print_environment(char **env)
 		env++;
 	}
 }
+#include "main.h"
+
+/**
+ * get_env_value - Get the value of a specific environment variable.
+ * ...
+ * (rest of the function remains unchanged)
+ */
+
+/**
+ * execute_command - Function that executes a command.
+ * ...
+ * (rest of the function remains unchanged)
+ */
+
+/**
+ * error_message - Print the command not found error message.
+ * ...
+ * (rest of the function remains unchanged)
+ */
+
+/**
+ * print_environment - Print all environmental variables.
+ * ...
+ * (rest of the function remains unchanged)
+ */
+
+/* Rest of the functions remain unchanged */
