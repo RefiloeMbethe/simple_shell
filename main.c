@@ -2,9 +2,11 @@
 
 /**
  * main - Main shell loop.
+ *
  * @num_args: Number of inputed args.
  * @arry_args: Pointer to array of inputed args.
  * @env: Pointer to array of env variables.
+ *
  * Return: 0.
  */
 int main(int num_args, char **arry_args, char **env)
