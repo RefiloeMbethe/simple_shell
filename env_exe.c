@@ -6,7 +6,7 @@
  * @env: Pointer to the environmental variables array.
  * @var_name: Name of the environment variable to find.
  *
- * Return: Pointer to the value of the environment variable, or NULL if not found.
+ * Return: Pointer to value of the environment variable, or NULL if not found.
  */
 char *get_env_value(char **env, const char *var_name)
 {
