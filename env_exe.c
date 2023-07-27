@@ -40,7 +40,7 @@ void execute_command(char **commands, char *shell_name, char **env, int cycle)
 
 	if (strings_compare(commands[0], "env") == 0)
 	{
-		print_environment(env);
+		prints_environ(env);
 		return;
 	}
 
@@ -49,7 +49,7 @@ void execute_command(char **commands, char *shell_name, char **env, int cycle)
 		if (execve(commands[0], commands, env) < 0)
 		{
 			perror(shell_name);
-			free_and_exit(commands);
+			free_memry_exit(commands);
 		}
 	}
 	else
@@ -57,15 +57,15 @@ void execute_command(char **commands, char *shell_name, char **env, int cycle)
 		path_dirs = split_string(get_env_value(env, "PATH"), ":");
 		while (path_dirs[i])
 		{
-			full_path = string_concat(path_dirs[i], "/");
-			full_path = string_concat(full_path, commands[0]);
+			full_path = string_conc(path_dirs[i], "/");
+			full_path = string_conc(full_path, commands[0]);
 			i++;
 			if (stat(full_path, &st) == 0)
 			{
 				if (execve(full_path, commands, env) < 0)
 				{
 					perror(shell_name);
-					free_and_exit(commands);
+					free_memry_exit(commands);
 				}
 				return;
 			}
@@ -74,7 +74,7 @@ void execute_command(char **commands, char *shell_name, char **env, int cycle)
 	}
 
 	error_message(shell_name, cycle, commands[0]);
-	free_and_exit(commands);
+	free_memry_exit(commands);
 }
 
 /**
